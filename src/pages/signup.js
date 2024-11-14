@@ -14,7 +14,7 @@ const Signup = () => {
   const handleSignup = async () => {
     try {
       await signUpUser(email, password);
-      navigate("/login"); // Updated path
+      navigate("/");
     } catch (error) {
       setError("Signup failed. Please try again.");
     }

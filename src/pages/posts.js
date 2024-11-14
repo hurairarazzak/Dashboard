@@ -1,87 +1,64 @@
 // src/pages/Posts.js
 
 import React, { useState, useEffect } from 'react';
-import { addData, getData, editData, deleteData } from '../config/firebase/firebaseFunctions';
-import { Button, Input, List } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { getData, deleteData } from '../config/firebase/firebaseFunctions';
+import { Button, Card } from 'antd';
 
 const Posts = () => {
   const [posts, setPosts] = useState({});
-  const [newPost, setNewPost] = useState('');
-  const [editingId, setEditingId] = useState(null);
-  const [editingContent, setEditingContent] = useState('');
+  const navigate = useNavigate();
 
-  // Fetch posts from Firebase on component mount
   useEffect(() => {
     fetchPosts();
   }, []);
 
   const fetchPosts = async () => {
     const data = await getData('posts');
-    if (data) {
-      setPosts(data);
-    } else {
-      setPosts({}); // Set to empty object if no data found
-    }
-  };
-
-  const handleAddPost = async () => {
-    if (newPost.trim() === '') return;
-    await addData('posts', { content: newPost });
-    setNewPost('');
-    fetchPosts(); // Refresh post list
-  };
-
-  const handleEditPost = async (id) => {
-    await editData(`posts/${id}`, { content: editingContent });
-    setEditingId(null);
-    setEditingContent('');
-    fetchPosts(); // Refresh post list
+    setPosts(data || {});
   };
 
   const handleDeletePost = (id) => {
     deleteData(`posts/${id}`);
-    fetchPosts(); // Refresh post list after deletion
+    fetchPosts();
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Posts</h1>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-semibold">Posts</h1>
+        <Button type="primary" onClick={() => navigate('/addPost')}>
+          Add New Post
+        </Button>
+      </div>
       
-      {/* Add New Post */}
-      <Input
-        placeholder="Enter new post content"
-        value={newPost}
-        onChange={(e) => setNewPost(e.target.value)}
-        style={{ marginBottom: '10px' }}
-      />
-      <Button type="primary" onClick={handleAddPost}>Add New Post</Button>
-
-      {/* List of Posts */}
-      <List
-        itemLayout="horizontal"
-        dataSource={Object.entries(posts)}
-        renderItem={([id, post]) => (
-          <List.Item
-            actions={[
-              <Button onClick={() => { setEditingId(id); setEditingContent(post.content); }}>Edit</Button>,
-              <Button danger onClick={() => handleDeletePost(id)}>Delete</Button>
-            ]}
+      {/* Display posts in a grid layout */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {Object.entries(posts).map(([id, post]) => (
+          <Card
+            key={id}
+            hoverable
+            className="bg-white shadow-md rounded-lg overflow-hidden"
+            cover={post.imageUrl ? (
+              <img
+                src={post.imageUrl}
+                alt={post.title}
+                className="h-48 w-full object-cover"
+              />
+            ) : null}
           >
-            <List.Item.Meta
-              title={editingId === id ? (
-                <Input
-                  value={editingContent}
-                  onChange={(e) => setEditingContent(e.target.value)}
-                  onPressEnter={() => handleEditPost(id)}
-                  onBlur={() => handleEditPost(id)}
-                />
-              ) : (
-                <span>{post.content}</span>
-              )}
-            />
-          </List.Item>
-        )}
-      />
+            <div className="p-4">
+              <h2 className="text-xl font-bold mb-2">{post.title}</h2>
+              <p className="text-gray-600 mb-4">{post.description}</p>
+              <div className="flex justify-end space-x-2">
+                <Button type="danger" onClick={() => handleDeletePost(id)}>
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };
