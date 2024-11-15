@@ -20,7 +20,7 @@ const AddPost = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Add New Post</h1>
+      <h1 className="text-3xl pb-5 font-semibold">Add New Post</h1>
       
       <Form layout="vertical" onFinish={handleSubmit}>
         <Form.Item label="Title" required>

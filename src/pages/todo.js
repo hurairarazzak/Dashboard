@@ -1,8 +1,9 @@
 // src/pages/Todo.js
+
 import React, { useState, useEffect } from 'react';
 import { Input, Button, List } from 'antd';
-import { database, ref, push, onValue, remove } from '../config/firebase/firebaseconfig';
-
+import { database, ref, push, onValue, remove, update } from '../config/firebase/firebaseconfig';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const Todo = () => {
   const [todo, setTodo] = useState('');
@@ -33,9 +34,18 @@ const Todo = () => {
     remove(todoRef);
   };
 
+  // Edit a todo via prompt
+  const editTodo = (id, currentText) => {
+    const newText = prompt('Edit your todo:', currentText);  // Show prompt with the current text pre-filled
+    if (newText && newText.trim() !== currentText) {
+      const todoRef = ref(database, `todos/${id}`);
+      update(todoRef, { text: newText.trim() }); // Update todo if new text is provided
+    }
+  };
+
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Todo App</h1>
+      <h1 className="text-3xl pb-5 font-semibold">Todo App</h1>
       <div className="flex mb-4">
         <Input
           value={todo}
@@ -52,7 +62,18 @@ const Todo = () => {
         dataSource={todos}
         renderItem={(item) => (
           <List.Item
-            actions={[<Button type="link" onClick={() => deleteTodo(item.id)}>Delete</Button>]}
+            actions={[
+              <Button
+                type="link"
+                onClick={() => editTodo(item.id, item.text)}
+                icon={<EditOutlined />}
+              />,
+              <Button
+                type="link"
+                onClick={() => deleteTodo(item.id)}
+                icon={<DeleteOutlined />}
+              />,
+            ]}
           >
             {item.text}
           </List.Item>

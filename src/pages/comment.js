@@ -48,7 +48,7 @@ const CommentsPage = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl mb-4">Comments Section</h1>
+      <h1 className="text-3xl pb-5 font-semibold">Comments Section</h1>
       <TextArea
         placeholder="Write a comment..."
         value={newComment}

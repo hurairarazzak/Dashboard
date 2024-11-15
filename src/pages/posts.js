@@ -26,7 +26,7 @@ const Posts = () => {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-semibold">Posts</h1>
+        <h1 className="text-3xl pb-5 font-semibold">Posts</h1>
         <Button type="primary" onClick={() => navigate('/addPost')}>
           Add New Post
         </Button>

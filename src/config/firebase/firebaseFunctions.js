@@ -16,6 +16,7 @@ export const addData = async (path, data) => {
   return newDataRef.key; // Return the key of the new entry
 };
 
+// Fetching data from the database
 export const getData = async (path) => {
   const snapshot = await get(ref(database, path));
   if (snapshot.exists()) {
@@ -24,6 +25,7 @@ export const getData = async (path) => {
     return null;
   }
 };
+
 
 export const editData = (path, data) => update(ref(database, path), data);
 
