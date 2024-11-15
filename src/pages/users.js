@@ -12,9 +12,9 @@ const UserPage = () => {
       if (data) {
         const userArray = Object.keys(data).map((key) => ({
           ...data[key],
-          userID: key,
+          userID: key, // Map Firebase ID
         }));
-        setUserData(userArray);
+        setUserData(userArray); // Set the user data to state
       }
     };
 
@@ -25,7 +25,7 @@ const UserPage = () => {
     { title: "UserName", dataIndex: "userName", key: "userName" },
     { title: "Email", dataIndex: "email", key: "email" },
     { title: "Gender", dataIndex: "gender", key: "gender" },
-    { title: "User ID", dataIndex: "userID", key: "userID" },
+    { title: "User ID", dataIndex: "userID", key: "userID" }, // Show Firebase ID
   ];
 
   return (

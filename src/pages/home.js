@@ -5,6 +5,7 @@ import Todo from "../pages/todo";
 import Comment from "../pages/comment";
 import AddPost from "../pages/addPost";
 import AddCommentPage from "./photo";
+import UserPage from "./users";
 import Album from "./album";
 import Login from "./login";
 import SignUp from "./signup";
@@ -83,6 +84,7 @@ export default function Home() {
       <div className="col-span-9 p-4">
         {/* Define Routes inside the main content area */}
         <Routes>
+          <Route path="/users" element={<UserPage />} />
           <Route path="/posts" element={<Posts />} />
           <Route path="/addPost" element={<AddPost />} />
           <Route path="/todo" element={<Todo />} />
